@@ -92,12 +92,19 @@ namespace Control_de_Inventario_lista_circular_v2
         {
             Base temp = inicio;
 
-            while (temp.siguiente != inicio && temp.nombre != nombreB)
+            if (temp != null)
             {
-                temp = temp.siguiente;
+                while (temp.siguiente != inicio && temp.nombre != nombreB)
+                {
+                    temp = temp.siguiente;
+                }
+                //Variable temp regresa exactamente la base con el nombre que ingresamos.
+                return temp;
             }
-            //Variable temp regresa exactamente la base con el nombre que ingresamos.
-            return temp;
+            else
+            {
+                return inicio;
+            }
         }
 
         public void eliminarPorNombre(string nombreB)
@@ -138,37 +145,23 @@ namespace Control_de_Inventario_lista_circular_v2
         {
             Base temp = buscarPorNombre(nombreB);
             string cadena = "";
-            int horaInicio = inicio.Hour, 
-                horaFin = fin.Hour, 
-                minutosInicio = inicio.Minute, 
-                minutosFin = fin.Minute,
-                total = 60, minutosZero = 0;
+            int minutosZero = 0;
 
-            total = total - minutosInicio;
-            total = total + minutosFin;
-
-            if (horaInicio < horaFin)
+            if (temp != null)
             {
-                while (minutosZero < total && (minutosZero + temp.siguiente.minutos) < total)
+                while (inicio < fin)
                 {
-                    minutosZero += temp.siguiente.minutos;
-                    cadena += temp.nombre + " -----> " + temp.siguiente.nombre + "\r\n" + "\r\n";
+                    inicio = inicio.AddMinutes(temp.siguiente.minutos);
+                    cadena += temp.nombre + " -----> " + temp.siguiente.nombre + " Tiempo hecho: " + temp.siguiente.minutos + "\r\n" + "\r\n";
                     temp = temp.siguiente;
+                    minutosZero += temp.minutos;
                 }
                 cadena += "Terminas en la base " + temp.nombre + "." + "\r\n" + "Hiciste un total de " + minutosZero + " minutos.";
                 return cadena;
             }
             else
             {
-                while (minutosInicio < minutosFin && (minutosInicio + temp.siguiente.minutos) < minutosFin)
-                {
-                    minutosInicio += temp.siguiente.minutos;
-                    minutosZero += temp.siguiente.minutos;
-                    cadena += temp.nombre + " -----> " + temp.siguiente.nombre + "\r\n" + "\r\n";
-                    temp = temp.siguiente;
-                }
-                cadena += "Terminas en la base " + temp.nombre + "." + "\r\n" + "Hiciste un total de " + minutosZero + " minutos.";
-                return cadena;
+                return "No existe esa base";
             }
         }
 
